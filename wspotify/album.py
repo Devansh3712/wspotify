@@ -36,8 +36,9 @@ class Album(APIReference):
         -------
         list[SimplifiedTrack]
         """
-        futures: list[Future[Response]] = []
         params = {"limit": 50}
+
+        futures: list[Future[Response]] = []
         with ThreadPoolExecutor() as executor:
             for offset in range(50, total, 50):
                 params["offset"] = offset
@@ -97,7 +98,7 @@ class Album(APIReference):
         tracks = tracks_page.items
 
         if tracks_page.total > 50:
-            remaining_tracks = self._get_all_tracks(url, tracks_page.total)
+            remaining_tracks = self._get_all_tracks(f"{url}/tracks", tracks_page.total)
             tracks.extend(remaining_tracks)
 
         album.tracks = tracks
