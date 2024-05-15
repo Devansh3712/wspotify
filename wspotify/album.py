@@ -84,7 +84,7 @@ class Album(APIReference):
         self.check_access_token()
 
         url = f"{self.base_url}/albums/{id}"
-        if market:
+        if market is not None:
             url += f"&market={market}"
 
         response = self.client.get(url)
@@ -133,7 +133,7 @@ class Album(APIReference):
         self.check_access_token()
 
         params: dict[str, str] = {}
-        if market:
+        if market is not None:
             params["market"] = market
 
         # API limits maximum IDs to 20, use a loop to request
@@ -204,7 +204,7 @@ class Album(APIReference):
             "limit": 50 if limit is None else min(limit, 50),
             "offset": offset,
         }
-        if market:
+        if market is not None:
             params["market"] = market
         url = f"{self.base_url}/albums/{id}/tracks"
         # Get total tracks, pass is as the limit for _get_all_tracks
@@ -263,7 +263,7 @@ class Album(APIReference):
             "limit": 50 if limit is None else min(limit, 50),
             "offset": offset,
         }
-        if market:
+        if market is not None:
             params["market"] = market
         url = f"{self.base_url}/me/albums"
 
