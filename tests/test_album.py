@@ -27,3 +27,10 @@ def test_get_album_tracks(auth_flow):
 
     assert len(result) == 199
     assert result[0].artists[0].name == "Mac DeMarco"
+
+
+def test_get_album_tracks_limit(auth_flow):
+    album = Album(auth_flow)
+    result = album.get_album_tracks("70hX7IYqmUGV97OXs2v848", limit=100)
+
+    assert len(result) == 100

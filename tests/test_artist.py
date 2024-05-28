@@ -25,6 +25,13 @@ def test_get_artist_albums(auth_flow):
     assert "Qabool Hai (Deluxe)" in [album.name for album in result]
 
 
+def test_get_artist_albums_limit(auth_flow):
+    artist = Artist(auth_flow)
+    result = artist.get_artist_albums("1ZBspcSxfWh6GuxjGr5u0p", limit=3)
+
+    assert len(result) == 3
+
+
 def test_get_artist_top_tracks(auth_flow):
     artist = Artist(auth_flow)
     result = artist.get_artist_top_tracks("7FvX2e6CgYllzgZ9uempWF")
