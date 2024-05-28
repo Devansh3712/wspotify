@@ -158,9 +158,10 @@ class Artist(APIReference):
         result = albums.items
 
         if (limit is None or limit > 50) and albums.total > 50:
+            limit = albums.total if limit is None else limit
             futures: list[Future[Response]] = []
             with ThreadPoolExecutor() as executor:
-                for offset in range(50, albums.total, 50):
+                for offset in range(50, limit, 50):
                     params["offset"] = offset
                     future = executor.submit(
                         self.client.get, f"{url}?{urlencode(params)}"

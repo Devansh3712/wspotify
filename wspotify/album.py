@@ -218,7 +218,8 @@ class Album(APIReference):
         result = tracks_page.items
 
         if (limit is None or limit > 50) and tracks_page.total > 50:
-            remaining_tracks = self._get_all_tracks(url, tracks_page.total)
+            limit = tracks_page.total if limit is None else limit
+            remaining_tracks = self._get_all_tracks(url, limit)
             result.extend(remaining_tracks)
 
         return result
@@ -277,9 +278,10 @@ class Album(APIReference):
         result = albums.items
 
         if (limit is None or limit > 50) and albums.total > 50:
+            limit = albums.total if limit is None else limit
             futures: list[Future[Response]] = []
             with ThreadPoolExecutor() as executor:
-                for offset in range(50, albums.total, 50):
+                for offset in range(50, limit, 50):
                     params["offset"] = offset
                     future = executor.submit(
                         self.client.get, f"{url}?{urlencode(params)}"
@@ -466,9 +468,10 @@ class Album(APIReference):
         result = albums.items
 
         if (limit is None or limit > 50) and albums.total > 50:
+            limit = albums.total if limit is None else limit
             futures: list[Future[Response]] = []
             with ThreadPoolExecutor() as executor:
-                for offset in range(50, albums.total, 50):
+                for offset in range(50, limit, 50):
                     params["offset"] = offset
                     future = executor.submit(
                         self.client.get, f"{url}?{urlencode(params)}"
